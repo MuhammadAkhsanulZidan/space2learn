@@ -23,6 +23,7 @@ export default function WaveResonance() {
     const forkY = height / 2;
 
     function drawFork(x: number, amp: number, label: string) {
+      if(!ctx) return;
       ctx.strokeStyle = "black";
       ctx.lineWidth = 5;
 
