@@ -2,7 +2,6 @@ import { useState } from "react";
 
 export default function WaveReflection() {
   const [angle, setAngle] = useState(45);
-  const [show, setShow] = useState(false);
 
   const length = 150;
   const rad = (angle * Math.PI) / 180;
@@ -28,7 +27,6 @@ export default function WaveReflection() {
           value={angle}
           onChange={(e) => {
             setAngle(parseInt(e.target.value));
-            setShow(false);
           }}
           className="w-2/3 accent-blue-500"
         />
