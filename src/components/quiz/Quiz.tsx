@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef, useState, useEffect } from "react";
@@ -45,14 +46,14 @@ export default function PlaneQuizGame({
   const [countdown, setCountdown] = useState(3);
   const [gameStarted, setGameStarted] = useState(false);
 
-  useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
+  useEffect(()=>{
+    if(countdown>0){
+      const timer = setTimeout(()=>setCountdown(countdown-1), 1000);
+      return ()=> clearTimeout(timer);
     } else {
       setGameStarted(true);
     }
-  }, [countdown]);
+  }, [countdown ])
 
   const handleShoot = (index: number) => {
     if (bullets === 0 || destroyed.includes(index) || gameOver || !planeReady) return;
@@ -99,6 +100,19 @@ export default function PlaneQuizGame({
       });
     }, 500);
   };
+
+  <h2 className="text-2xl font-bold mb-4">Simulasi Gempa: Hiposentrum & Episentrum</h2>
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => 
+        setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setGameStarted(true);
+    }
+  }, [countdown]);
+
+
 
   const nextQuestion = () => {
     setPopup(null);
@@ -263,10 +277,9 @@ export default function PlaneQuizGame({
         </div>
       )}
 
-      {/* Countdown Overlay */}
       {!gameStarted && (
         <div className="absolute inset-0 bg-opacity-90 flex flex-col items-center justify-center z-50 text-white text-center">
-          <h1 className="text-2xl font-bold mb-4">Lindungi Bumi dari Meteor!</h1>
+          <h1 className="text-2xl font-bold mb-4">Lindungi Stasiun dari Meteor!</h1>
           <p className="text-6xl font-bold animate-pulse">{countdown > 0 ? countdown : "Mulai!"}</p>
         </div>
       )}

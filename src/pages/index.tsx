@@ -18,7 +18,7 @@ export default function Home() {
       
       <div className="w-1/2 gap-6 flex flex-col justify-center items-center">
         {!start && (<div className="text-center gap-2 flex flex-col">
-          <p className="text-xl font-bold">Angkasa Dalam bahaya!</p>
+          <p className="text-2xl font-bold">Stasiun Luar Angkasa Dalam bahaya!</p>
           <p className="text-center leading-relaxed">Segera Kumpulkan Ilmu Pengetahuan Alam untuk menyelamatkannya!</p>
         </div>)}
         {/* Spaceship */}
@@ -33,7 +33,7 @@ export default function Home() {
         {!start && (
           <button
             onClick={handleStart}
-            className="px-6 py-3 bg-red-500 hover:bg-red-700 text-white text-lg rounded-lg shadow-md transition"
+            className="px-6 py-3 bg-red-500 cursor-pointer hover:bg-red-700 text-white text-lg rounded-lg shadow-md transition"
           >
             Mulai Petualangan
           </button>

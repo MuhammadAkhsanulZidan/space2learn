@@ -43,7 +43,7 @@ export default function Home() {
             </li>
           </ul>
         </div>
-
+        
         <ConcaveMirror />
       </div>
     </Material>

@@ -2,85 +2,95 @@ import { useRef, useState, useEffect } from "react";
 
 export default function ConcaveMirror() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [objectDistance, setObjectDistance] = useState(50); // Default
+  const [objectDistance, setObjectDistance] = useState(200); // scaled unit
 
-  useEffect(() => {
+  const VIRTUAL_WIDTH = 1000;
+  const VIRTUAL_HEIGHT = 500;
+
+  const draw = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const parent = canvas.parentElement;
+    if (parent) {
+      canvas.width = parent.clientWidth;
+      canvas.height = (VIRTUAL_HEIGHT / VIRTUAL_WIDTH) * parent.clientWidth;
+    }
+
     const width = canvas.width;
     const height = canvas.height;
-    const centerY = height / 2;
 
-    const mirrorX = width / 2;
-    const focalLength = 80;
+    const scaleX = width / VIRTUAL_WIDTH;
+    const scaleY = height / VIRTUAL_HEIGHT;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Scale everything
+    ctx.scale(scaleX, scaleY);
+
+    const centerY = VIRTUAL_HEIGHT / 2;
+    const mirrorX = VIRTUAL_WIDTH / 2;
+    const focalLength = 100;
     const radius = 2 * focalLength;
 
     const F = mirrorX - focalLength;
     const C = mirrorX - radius;
 
     const objectX = mirrorX - objectDistance;
-    const objectHeight = 50;
+    const objectHeight = 80;
     const objectTopY = centerY - objectHeight;
 
-    ctx.clearRect(0, 0, width, height);
-
-    // === Principal Axis ===
+    // Principal Axis
     ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(0, centerY);
-    ctx.lineTo(width, centerY);
+    ctx.lineTo(VIRTUAL_WIDTH, centerY);
     ctx.stroke();
 
-    // === Mirror (Concave)
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
-    ctx.save(); // Save the current state
-
-    ctx.translate(mirrorX-100, centerY); // Move to the mirror center
-    ctx.scale(1, 1.5); // Stretch vertically (Y axis)
-
+    // Mirror (Concave)
+    ctx.save();
+    ctx.translate(mirrorX - 100, centerY);
+    ctx.scale(1, 1.5);
     ctx.beginPath();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "black";
-    ctx.arc(0, 0, 100, Math.PI *65/180, Math.PI * 295 / 180, true); // Centered at (0,0) because of translate
+    ctx.arc(0, 0, 100, Math.PI * 65 / 180, Math.PI * 295 / 180, true);
     ctx.stroke();
+    ctx.restore();
 
-    ctx.restore(); // Restore to original scale
-
-
-    // === Mark F and C ===
+    // F and C marks
     ctx.fillStyle = "green";
     ctx.beginPath();
-    ctx.arc(F, centerY, 4, 0, Math.PI * 2);
+    ctx.arc(F, centerY, 5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillText("F", F - 5, centerY + 20);
+    ctx.font = "bold 20px Arial";
+    ctx.fillText("F", F - 10, centerY + 30);
 
     ctx.fillStyle = "orange";
     ctx.beginPath();
-    ctx.arc(C, centerY, 4, 0, Math.PI * 2);
+    ctx.arc(C, centerY, 5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillText("C", C - 5, centerY + 20);
+    ctx.fillText("C", C - 10, centerY + 30);
 
-    // === Draw Object ===
+    // Object
     ctx.strokeStyle = "blue";
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(objectX, centerY);
     ctx.lineTo(objectX, objectTopY);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(objectX - 5, objectTopY + 10);
+    ctx.moveTo(objectX - 10, objectTopY + 20);
     ctx.lineTo(objectX, objectTopY);
-    ctx.lineTo(objectX + 5, objectTopY + 10);
+    ctx.lineTo(objectX + 10, objectTopY + 20);
     ctx.stroke();
     ctx.fillStyle = "blue";
-    ctx.fillText("Objek", objectX - 20, objectTopY - 10);
+    ctx.fillText("Objek", objectX - 30, objectTopY - 20);
 
-    // === Determine Bayangan ===
-    const f = focalLength;
+    // Image calculation
     const s = objectDistance;
+    const f = focalLength;
     let sifat = "";
     let imageX = 0;
     let imageHeight = 0;
@@ -90,7 +100,7 @@ export default function ConcaveMirror() {
       sifat = "Bayangan tidak terbentuk (di tak hingga)";
       visible = false;
     } else {
-      const sPrime = (f * s) / (s - f); // rumus cermin
+      const sPrime = (f * s) / (s - f);
       imageX = mirrorX - sPrime;
       const magnification = -sPrime / s;
       imageHeight = objectHeight * Math.abs(magnification);
@@ -106,65 +116,68 @@ export default function ConcaveMirror() {
       }
     }
 
-    // === Draw Image Arrow (if visible)
-
+    // Draw Image
     if (visible) {
       if (s > f) {
-        const topY = centerY + imageHeight; // inverted is *below* the axis
-
+        const topY = centerY + imageHeight;
         ctx.strokeStyle = "red";
         ctx.beginPath();
         ctx.moveTo(imageX, centerY);
         ctx.lineTo(imageX, topY);
         ctx.stroke();
-
-        // Inverted arrowhead
         ctx.beginPath();
-        ctx.moveTo(imageX - 5, topY - 10);
+        ctx.moveTo(imageX - 10, topY - 20);
         ctx.lineTo(imageX, topY);
-        ctx.lineTo(imageX + 5, topY - 10);
+        ctx.lineTo(imageX + 10, topY - 20);
         ctx.stroke();
-
         ctx.fillStyle = "red";
-        ctx.fillText("Bayangan", imageX - 30, topY + 20);
-      }
-
-      else {
+        ctx.fillText("Bayangan", imageX - 40, topY + 30);
+      } else {
         const topY = centerY - imageHeight;
-
         ctx.strokeStyle = "red";
         ctx.beginPath();
         ctx.moveTo(imageX, centerY);
         ctx.lineTo(imageX, topY);
         ctx.stroke();
         ctx.beginPath();
-        ctx.moveTo(imageX - 5, topY + 10);
+        ctx.moveTo(imageX - 10, topY + 20);
         ctx.lineTo(imageX, topY);
-        ctx.lineTo(imageX + 5, topY + 10);
+        ctx.lineTo(imageX + 10, topY + 20);
         ctx.stroke();
-
         ctx.fillStyle = "red";
-        ctx.fillText("Bayangan", imageX - 30, topY - 10);
-
+        ctx.fillText("Bayangan", imageX - 40, topY - 20);
       }
     }
 
-    // === Deskripsi Bayangan ===
+    // Description
     ctx.fillStyle = "green";
-    ctx.font = "bold 16px Arial";
-    ctx.fillText(sifat, 50, height - 30);
+    ctx.font = "bold 22px Arial";
+    ctx.fillText(sifat, 40, VIRTUAL_HEIGHT - 40);
+
+    // Reset transform for next draw
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  };
+
+  useEffect(() => {
+    draw();
   }, [objectDistance]);
 
+  useEffect(() => {
+    window.addEventListener("resize", draw);
+    return () => window.removeEventListener("resize", draw);
+  }, []);
+
   return (
-    <div className="p-6 bg-gray-900 text-white rounded shadow-lg w-full max-w-4xl mx-auto mt-8">
+    <div className="p-4 bg-gray-900 text-white rounded shadow-lg w-full mx-auto mt-8">
       <h2 className="text-xl font-semibold mb-4 text-center">
         Simulasi Interaktif Cermin Cekung
       </h2>
-
-      <canvas ref={canvasRef} width={800} height={400} className="bg-white rounded" />
+      <div className="w-full">
+        <canvas ref={canvasRef} className="bg-white rounded w-full" />
+      </div>
 
       <div className="flex flex-col items-center mt-4">
-        <label className="mb-1 text-sm">Jarak Objek dari Cermin: {objectDistance}px</label>
+        <label className="mb-1 text-sm">Jarak Objek dari Cermin: {objectDistance}</label>
         <input
           type="range"
           min={50}

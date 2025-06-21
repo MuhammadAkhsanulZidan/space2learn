@@ -2,87 +2,97 @@ import { useEffect, useRef, useState } from "react";
 
 export default function ConvexMirror() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [objectDistance, setObjectDistance] = useState(20); // Object distance from mirror
+  const [objectDistance, setObjectDistance] = useState(200); // scaled unit
 
-  useEffect(() => {
+  const VIRTUAL_WIDTH = 1000;
+  const VIRTUAL_HEIGHT = 500;
+
+  const draw = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const parent = canvas.parentElement;
+    if (parent) {
+      canvas.width = parent.clientWidth;
+      canvas.height = (VIRTUAL_HEIGHT / VIRTUAL_WIDTH) * parent.clientWidth;
+    }
+
     const width = canvas.width;
     const height = canvas.height;
-    const centerY = height / 2;
 
-    const mirrorX = width/2;
-    const focalLength = 80
+    const scaleX = width / VIRTUAL_WIDTH;
+    const scaleY = height / VIRTUAL_HEIGHT;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.scale(scaleX, scaleY);
+
+    const centerY = VIRTUAL_HEIGHT / 2;
+    const mirrorX = VIRTUAL_WIDTH / 2;
+    const focalLength = 100;
     const radius = 2 * focalLength;
 
     const F = mirrorX + focalLength;
     const C = mirrorX + radius;
 
-    const objectX = (mirrorX - objectDistance);
-    const objectHeight = 50;
+    const objectX = mirrorX - objectDistance;
+    const objectHeight = 80;
     const objectTopY = centerY - objectHeight;
 
-    ctx.clearRect(0, 0, width, height);
-
-    // === Axis Line ===
+    // Axis line
     ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(0, centerY);
-    ctx.lineTo(width, centerY);
+    ctx.lineTo(VIRTUAL_WIDTH, centerY);
     ctx.stroke();
 
-    // === Convex Mirror ===
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
-    ctx.save(); // Save the current state
-    ctx.translate(mirrorX+110, centerY); // Move to the mirror center
-    ctx.scale(1, 1.5); // Stretch vertically (Y axis)
-
+    // Convex mirror
+    ctx.save();
+    ctx.translate(mirrorX + 110, centerY);
+    ctx.scale(1, 1.5);
     ctx.beginPath();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "black";
-    ctx.arc(0, 0, 100, Math.PI *235/ 180, Math.PI * 135/ 180, true); // Centered at (0,0) because of translate
+    ctx.arc(0, 0, 100, Math.PI * 235 / 180, Math.PI * 135 / 180, true);
     ctx.stroke();
+    ctx.restore();
 
-    ctx.restore(); // Restore to original scale
-
-    // === F and C points ===
+    // F and C points
     ctx.fillStyle = "green";
     ctx.beginPath();
-    ctx.arc(F, centerY, 4, 0, Math.PI * 2);
+    ctx.arc(F, centerY, 5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillText("F", F + 5, centerY + 20);
+    ctx.font = "bold 20px Arial";
+    ctx.fillText("F", F + 5, centerY + 30);
 
     ctx.fillStyle = "orange";
     ctx.beginPath();
-    ctx.arc(C, centerY, 4, 0, Math.PI * 2);
+    ctx.arc(C, centerY, 5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillText("C", C + 5, centerY + 20);
+    ctx.fillText("C", C + 5, centerY + 30);
 
-    // === Object ===
+    // Object
     ctx.strokeStyle = "blue";
     ctx.beginPath();
     ctx.moveTo(objectX, centerY);
     ctx.lineTo(objectX, objectTopY);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(objectX - 5, objectTopY + 10);
+    ctx.moveTo(objectX - 10, objectTopY + 20);
     ctx.lineTo(objectX, objectTopY);
-    ctx.lineTo(objectX + 5, objectTopY + 10);
+    ctx.lineTo(objectX + 10, objectTopY + 20);
     ctx.stroke();
-    ctx.fillText("Objek", objectX - 20, objectTopY - 10);
+    ctx.fillStyle = "blue";
+    ctx.fillText("Objek", objectX - 30, objectTopY - 20);
 
-    // === Image (always virtual, upright, smaller) ===
+    // Image (virtual, upright, smaller)
     const s = objectDistance;
-    const f = -focalLength; // convex mirror focal length is negative
-    const sPrime = 1/((1/f)-(1/s))
-    const m = sPrime/s; // magnification < 1
+    const f = -focalLength; // convex: focal length negative
+    const sPrime = 1 / ((1 / f) - (1 / s));
+    const m = sPrime / s;
 
     const imageHeight = objectHeight * Math.abs(m);
-    const imageX = mirrorX - sPrime + 10; // draw on the right side, since it's virtual
+    const imageX = mirrorX - sPrime + 10;
 
     ctx.strokeStyle = "red";
     ctx.beginPath();
@@ -90,31 +100,39 @@ export default function ConvexMirror() {
     ctx.lineTo(imageX, centerY - imageHeight);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(imageX - 5, centerY - imageHeight + 10);
+    ctx.moveTo(imageX - 10, centerY - imageHeight + 20);
     ctx.lineTo(imageX, centerY - imageHeight);
-    ctx.lineTo(imageX + 5, centerY - imageHeight + 10);
+    ctx.lineTo(imageX + 10, centerY - imageHeight + 20);
     ctx.stroke();
 
     ctx.fillStyle = "red";
-    ctx.fillText("Bayangan", imageX - 30, centerY - imageHeight - 10);
+    ctx.fillText("Bayangan", imageX - 40, centerY - imageHeight - 20);
+
+    // Reset transform after draw
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  };
+
+  useEffect(() => {
+    draw();
   }, [objectDistance]);
 
+  useEffect(() => {
+    window.addEventListener("resize", draw);
+    return () => window.removeEventListener("resize", draw);
+  }, []);
+
   return (
-    <div className="p-6 bg-gray-900 text-white rounded shadow-lg w-full max-w-4xl mx-auto mt-8">
+    <div className="p-4 bg-gray-900 text-white rounded shadow-lg w-full mx-auto mt-8">
       <h2 className="text-xl font-semibold mb-4 text-center">
         Simulasi Cermin Cembung (Convex Mirror)
       </h2>
-
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={400}
-        className="bg-white rounded"
-      />
+      <div className="w-full">
+        <canvas ref={canvasRef} className="bg-white rounded w-full" />
+      </div>
 
       <div className="flex flex-col items-center mt-4">
         <label className="mb-1 text-sm">
-          Jarak Objek dari Cermin: {objectDistance}px
+          Jarak Objek dari Cermin: {objectDistance}
         </label>
         <input
           type="range"
