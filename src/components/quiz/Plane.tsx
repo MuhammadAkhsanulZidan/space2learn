@@ -10,7 +10,7 @@ export default function Plane({ planeX, planeRef }: PlaneProps) {
   return (
     <div
       ref={planeRef}
-      className="absolute bottom-10 z-20 transition-all duration-500"
+      className="absolute bottom-25 z-20 transition-all duration-500"
       style={{ left: planeX, transform: "translateX(-50%)" }}
     >
       <Image
