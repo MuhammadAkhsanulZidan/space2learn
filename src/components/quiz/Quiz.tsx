@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRef, useState, useEffect } from "react";
@@ -27,11 +26,13 @@ export default function PlaneQuizGame({
   const router = useRouter();
   const [questionIndex, setQuestionIndex] = useState(0);
   const questionData = questions[questionIndex];
+  const [totalBulletsUsed, setTotalBulletsUsed] = useState(0);
 
   const [bullets, setBullets] = useState(2);
   const [meteors] = useState([0, 1, 2, 3]);
   const [destroyed, setDestroyed] = useState<number[]>([]);
   const [gameOver, setGameOver] = useState(false);
+  const [win, setWin] = useState(false);
   const [justHit, setJustHit] = useState<number[]>([]);
   const [popup, setPopup] = useState<{ message: string; correct: boolean } | null>(null);
   const [firedBullet, setFiredBullet] = useState<{
@@ -46,17 +47,17 @@ export default function PlaneQuizGame({
   const [countdown, setCountdown] = useState(3);
   const [gameStarted, setGameStarted] = useState(false);
 
-  useEffect(()=>{
-    if(countdown>0){
-      const timer = setTimeout(()=>setCountdown(countdown-1), 1000);
-      return ()=> clearTimeout(timer);
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
     } else {
       setGameStarted(true);
     }
-  }, [countdown ])
+  }, [countdown]);
 
   const handleShoot = (index: number) => {
-    if (bullets === 0 || destroyed.includes(index) || gameOver || !planeReady) return;
+    if (bullets === 0 || destroyed.includes(index) || gameOver || win || !planeReady) return;
 
     const meteor = document.getElementById(`meteor-${index}`);
     if (!meteor || !planeRef.current) return;
@@ -88,6 +89,7 @@ export default function PlaneQuizGame({
           } else {
             setDestroyed((prev) => [...prev, index]);
             setPopup({ message: selectedOption.message, correct: false });
+
             if (bullets - 1 === 0) {
               setGameOver(true);
             }
@@ -96,23 +98,11 @@ export default function PlaneQuizGame({
           setFiredBullet(null);
           setPlaneReady(true);
           setBullets((prev) => prev - 1);
+          setTotalBulletsUsed(prev => prev + 1);
         },
       });
     }, 500);
   };
-
-  <h2 className="text-2xl font-bold mb-4">Simulasi Gempa: Hiposentrum & Episentrum</h2>
-  useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => 
-        setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    } else {
-      setGameStarted(true);
-    }
-  }, [countdown]);
-
-
 
   const nextQuestion = () => {
     setPopup(null);
@@ -121,12 +111,37 @@ export default function PlaneQuizGame({
     setJustHit([]);
     setPlaneX("50%");
     setPlaneReady(true);
-    setGameOver(false);
-    setQuestionIndex((prev) => prev + 1);
+    setQuestionIndex((prev) => {
+      if (prev + 1 === questions.length) {
+        setWin(true); // Win condition after last question
+      }
+      return prev + 1;
+    });
   };
 
   const resetGame = () => {
     window.location.reload();
+  };
+
+  // ⭐ Star Calculation Function
+  const renderStars = () => {
+    const starCount = 5;
+    const minimumBullets = questions.length;
+    const usedBullets = totalBulletsUsed === 0 ? 1 : totalBulletsUsed; // avoid division by zero
+    const efficiency = minimumBullets / usedBullets;
+    let goldStars = Math.round(efficiency * starCount);
+    if (goldStars > 5) goldStars = 5;
+    if (goldStars < 0) goldStars = 0;
+
+    return Array.from({ length: starCount }).map((_, i) => (
+      <Image
+        key={i}
+        src={i < goldStars ? "/Sprites/Stars/star_gold.png" : "/Sprites/Stars/star_silver.png"}
+        alt="Star"
+        width={30}
+        height={30}
+      />
+    ));
   };
 
   return (
@@ -167,7 +182,6 @@ export default function PlaneQuizGame({
         </button>
       </div>
 
-
       {gameStarted && (
         <>
           {/* Question */}
@@ -195,7 +209,7 @@ export default function PlaneQuizGame({
             </div>
           </div>
 
-          {/* Bullet */}
+          {/* Bullet Animation */}
           {firedBullet && (
             <div className="z-30">
               <Bullet
@@ -210,7 +224,7 @@ export default function PlaneQuizGame({
       )}
 
       {/* Popup for Correct/Incorrect */}
-      {popup && !gameOver && (
+      {popup && !gameOver && !win && (
         <div className="absolute inset-0 flex items-center justify-center bg-opacity-75 z-50">
           <div className="bg-white p-6 rounded-xl text-center">
             <h2 className={`text-lg font-bold mb-4 ${popup.correct ? "text-green-600" : "text-red-600"}`}>
@@ -220,12 +234,6 @@ export default function PlaneQuizGame({
 
             {popup.correct ? (
               <div className="space-x-4">
-                <button
-                  onClick={() => router.push(materialRoute)}
-                  className="bg-green-600 px-4 py-2 text-sm rounded text-white"
-                >
-                  Kembali ke Materi
-                </button>
                 {questionIndex < questions.length - 1 ? (
                   <button
                     onClick={nextQuestion}
@@ -235,10 +243,10 @@ export default function PlaneQuizGame({
                   </button>
                 ) : (
                   <button
-                    onClick={resetGame}
-                    className="bg-blue-500 px-4 py-2 text-sm rounded text-white"
+                    onClick={() => setWin(true)}
+                    className="bg-green-600 px-4 py-2 text-sm rounded text-white"
                   >
-                    Ulangi Misi
+                    Selesai
                   </button>
                 )}
               </div>
@@ -254,22 +262,41 @@ export default function PlaneQuizGame({
         </div>
       )}
 
+      {/* Win Screen */}
+      {win && (
+        <div className="absolute inset-0 flex items-center justify-center bg-opacity-75 z-50">
+          <div className="bg-white p-6 rounded-xl text-center">
+            <h2 className="text-green-600 text-lg font-bold mb-4">Misi Selesai!</h2>
+            <p className="mb-4 text-black text-sm">Skor Kamu:</p>
+            <div className="flex justify-center mb-4">
+              {renderStars()}
+            </div>
+            <div className="space-x-4">
+              <button onClick={resetGame} className="bg-blue-500 px-4 py-2 text-sm rounded text-white">
+                Ulangi Misi
+              </button>
+              <button onClick={() => router.push(materialRoute)} className="bg-green-600 px-4 py-2 text-sm rounded text-white">
+                Lihat Materi
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Game Over */}
       {gameOver && (
         <div className="absolute inset-0 flex items-center justify-center bg-opacity-75 z-50">
           <div className="bg-white p-6 rounded-xl text-center">
             <h2 className="text-purple-500 text-lg font-bold mb-4">Wah. Misilnya sudah Habis</h2>
+            <p className="mb-4 text-black text-sm">Skor Kamu:</p>
+            <div className="flex justify-center mb-4">
+              {renderStars()}
+            </div>
             <div className="space-x-4">
-              <button
-                onClick={resetGame}
-                className="bg-blue-500 px-4 py-2 text-sm rounded text-white"
-              >
+              <button onClick={resetGame} className="bg-blue-500 px-4 py-2 text-sm rounded text-white">
                 Coba Lagi
               </button>
-              <button
-                onClick={() => router.push(materialRoute)}
-                className="bg-green-600 px-4 py-2 text-sm rounded text-white"
-              >
+              <button onClick={() => router.push(materialRoute)} className="bg-green-600 px-4 py-2 text-sm rounded text-white">
                 Lihat Materi
               </button>
             </div>

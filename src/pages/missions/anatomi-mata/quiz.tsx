@@ -14,42 +14,42 @@ const questionData = [
   {
     question: "Bagian mata manakah yang memberi warna pada mata dan berfungsi mengatur jumlah cahaya yang masuk ke dalam mata?",
     options: [
-      { option: "Iris", message: "Benar! Iris memberi warna pada mata dan mengatur ukuran pupil untuk mengontrol jumlah cahaya." },
       { option: "Lensa", message: "Salah. Lensa memfokuskan cahaya ke retina." },
       { option: "Retina", message: "Salah. Retina menerima cahaya, bukan mengaturnya." },
+      { option: "Iris", message: "Benar! Iris memberi warna pada mata dan mengatur ukuran pupil untuk mengontrol jumlah cahaya." },
       { option: "Kornea", message: "Salah. Kornea hanya memfokuskan cahaya, tidak mengatur jumlahnya." },
     ],
-    correctIndex: 0,
+    correctIndex: 2,
   },
   {
     question: "Bagian mata yang berfungsi menangkap cahaya dan mengubahnya menjadi sinyal listrik adalah...",
     options: [
-      { option: "Retina", message: "Benar! Retina berisi sel fotoreseptor untuk menangkap cahaya." },
       { option: "Pupil", message: "Salah. Pupil hanya lubang masuk cahaya." },
       { option: "Lensa", message: "Salah. Lensa hanya memfokuskan cahaya." },
       { option: "Iris", message: "Salah. Iris hanya mengatur besar kecil pupil." },
+      { option: "Retina", message: "Benar! Retina berisi sel fotoreseptor untuk menangkap cahaya." },
     ],
-    correctIndex: 0,
+    correctIndex: 3,
   },
   {
     question: "Bagian mata yang berfungsi membawa sinyal dari mata ke otak adalah...",
     options: [
-      { option: "Saraf optik", message: "Benar! Saraf optik meneruskan sinyal ke otak." },
       { option: "Retina", message: "Salah. Retina hanya menangkap cahaya." },
+      { option: "Saraf optik", message: "Benar! Saraf optik meneruskan sinyal ke otak." },
       { option: "Kornea", message: "Salah. Kornea tidak berperan dalam pengiriman sinyal." },
       { option: "Sklera", message: "Salah. Sklera adalah lapisan pelindung luar mata." },
     ],
-    correctIndex: 0,
+    correctIndex: 1,
   },
   {
     question: "Bagian mata yang berfungsi untuk memfokuskan cahaya agar jatuh tepat di retina adalah...",
     options: [
-      { option: "Lensa", message: "Benar! Lensa dapat berubah bentuk untuk memfokuskan cahaya ke retina." },
       { option: "Pupil", message: "Salah. Pupil hanya mengatur cahaya yang masuk." },
       { option: "Saraf optik", message: "Salah. Saraf optik hanya mengirimkan sinyal ke otak." },
       { option: "Sklera", message: "Salah. Sklera adalah lapisan luar pelindung mata." },
+      { option: "Lensa", message: "Benar! Lensa dapat berubah bentuk untuk memfokuskan cahaya ke retina." },
     ],
-    correctIndex: 0,
+    correctIndex: 3,
   },
   {
     question: "Miopi (rabun jauh) terjadi ketika bayangan jatuh di...",
@@ -64,22 +64,22 @@ const questionData = [
   {
     question: "Hipermetropi (rabun dekat) terjadi ketika bayangan jatuh di...",
     options: [
-      { option: "Belakang retina, dikoreksi dengan lensa cembung", message: "Benar! Hipermetropi terjadi karena bola mata terlalu pendek atau lensa mata kurang mencembung." },
       { option: "Depan retina, dikoreksi dengan lensa cekung", message: "Salah. Itu adalah kondisi miopi." },
       { option: "Retina, dikoreksi dengan lensa silinder", message: "Salah. Lensa silinder untuk astigmatisme." },
+      { option: "Belakang retina, dikoreksi dengan lensa cembung", message: "Benar! Hipermetropi terjadi karena bola mata terlalu pendek atau lensa mata kurang mencembung." },
       { option: "Di tengah kornea", message: "Salah. Bayangan jatuh di retina, bukan kornea." },
     ],
-    correctIndex: 0,
+    correctIndex: 2,
   },
   {
     question: "Apa perbedaan utama antara sel kerucut dan sel batang di retina?",
     options: [
-      { option: "Sel kerucut untuk melihat warna, sel batang untuk melihat dalam gelap", message: "Benar! Sel kerucut mendeteksi warna dan bekerja baik di cahaya terang, sedangkan sel batang berfungsi dalam cahaya redup." },
       { option: "Sel kerucut hanya ada di malam hari", message: "Salah. Sel kerucut aktif di cahaya terang." },
       { option: "Sel batang untuk melihat warna", message: "Salah. Sel batang tidak mampu mendeteksi warna." },
+      { option: "Sel kerucut untuk melihat warna, sel batang untuk melihat dalam gelap", message: "Benar! Sel kerucut mendeteksi warna dan bekerja baik di cahaya terang, sedangkan sel batang berfungsi dalam cahaya redup." },
       { option: "Keduanya hanya berfungsi di malam hari", message: "Salah. Hanya sel batang yang aktif di malam hari." },
     ],
-    correctIndex: 0,
+    correctIndex: 2,
   }
 
 ];
