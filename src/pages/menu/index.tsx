@@ -10,7 +10,7 @@ export default function Menu() {
   const [start, setStart] = useState(false);
   const [showMenu, setShowMenu] = useState(false); // controls when menu appears
   const router = useRouter();
-  
+
   useEffect(() => {
     // Trigger plane animation first
     setStart(true);
@@ -23,21 +23,22 @@ export default function Menu() {
     return () => clearTimeout(timer);
   }, []);
 
-const menu: MenuItem[] = [
-    { label: "Sifat Cahaya", route: "/missions/sifat-cahaya" },
-    { label: "Hukum Pemantulan Sinar", route: "/missions/pemantulan" },
-    { label: "Jumlah Bayangan Pada Cermin Datar", route: "/missions/bayangan-datar" },
-    { label: "Sifat bayangan pada cermin dengan sudut 180", route: "/missions/sudut-180" },
-    { label: "Cermin cekung", route: "/missions/cekung" },
-    { label: "Cermin cembung", route: "/missions/cembung" },
-    { label: "Lensa divergen", route: "/missions/divergen" },
-    { label: "Lensa konvergen", route: "/missions/konvergen" },
-    { label: "menghitung kuat lensa", route: "/missions/kuat-lensa" },
-    { label: "anatomi mata", route: "/missions/anatomi-mata" },
-    { label: "lapisan atmosfir dan fungsinya", route: "/missions/atmosfer" },
-    { label: "siklus hidrologi", route: "/missions/hidrologi" },
-    { label: "tenaga endogen atau eksogen", route: "/missions/endogen-eksogen" },
-    { label: "gempa bumi", route: "/missions/gempa" },
+  const menu: MenuItem[] = [
+    { label: "Pertumbuhan & Perkembangan", route: "/missions/pertumbuhan-perkembangan" }
+    // { label: "Sifat Cahaya", route: "/missions/sifat-cahaya" },
+    // { label: "Hukum Pemantulan Sinar", route: "/missions/pemantulan" },
+    // { label: "Jumlah Bayangan Pada Cermin Datar", route: "/missions/bayangan-datar" },
+    // { label: "Sifat bayangan pada cermin dengan sudut 180", route: "/missions/sudut-180" },
+    // { label: "Cermin cekung", route: "/missions/cekung" },
+    // { label: "Cermin cembung", route: "/missions/cembung" },
+    // { label: "Lensa divergen", route: "/missions/divergen" },
+    // { label: "Lensa konvergen", route: "/missions/konvergen" },
+    // { label: "menghitung kuat lensa", route: "/missions/kuat-lensa" },
+    // { label: "anatomi mata", route: "/missions/anatomi-mata" },
+    // { label: "lapisan atmosfir dan fungsinya", route: "/missions/atmosfer" },
+    // { label: "siklus hidrologi", route: "/missions/hidrologi" },
+    // { label: "tenaga endogen atau eksogen", route: "/missions/endogen-eksogen" },
+    // { label: "gempa bumi", route: "/missions/gempa" },
   ];
 
   return (
