@@ -24,7 +24,8 @@ export default function Menu() {
   }, []);
 
   const menu: MenuItem[] = [
-    { label: "Pertumbuhan & Perkembangan", route: "/missions/pertumbuhan-perkembangan" }
+    { label: "Pertumbuhan & Perkembangan", route: "/missions/pertumbuhan-perkembangan" },
+    { label: "Pertumbuhan Manusia", route: "/missions/pertumbuhan-manusia" },
     // { label: "Sifat Cahaya", route: "/missions/sifat-cahaya" },
     // { label: "Hukum Pemantulan Sinar", route: "/missions/pemantulan" },
     // { label: "Jumlah Bayangan Pada Cermin Datar", route: "/missions/bayangan-datar" },
