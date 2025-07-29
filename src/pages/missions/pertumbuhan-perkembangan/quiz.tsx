@@ -153,8 +153,6 @@ const questionData = [
   }
 ];
 
-
-
 export default function Home() {
   return <PlaneQuizGame questions={questionData} materialRoute="/missions/sifat-cahaya" />
 }
