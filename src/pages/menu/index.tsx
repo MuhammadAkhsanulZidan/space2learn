@@ -24,8 +24,35 @@ export default function Menu() {
   }, []);
 
   const menu: MenuItem[] = [
-    { label: "Pertumbuhan & Perkembangan", route: "/missions/pertumbuhan-perkembangan" },
-    { label: "Pertumbuhan Manusia", route: "/missions/pertumbuhan-manusia" },
+    {
+      label: "Listrik Statis", route: "missions/listrik-statis/quiz"
+    },
+    {
+      label: "Gaya Listrik", route: "missions/gaya-listrik/quiz"
+    },
+    {
+      label: "Medan Listrik", route: "missions/medan-listrik/quiz"
+    },
+    {
+      label: "Potensial Listrik", route: "missions/potensial-listrik/quiz"
+    },
+    {
+      label: "Listrik Dinamis", route: "missions/listrik-dinamis/quiz"
+    },
+    {
+      label: "Arus Listrik", route: "missions/arus-listrik/quiz"
+    },
+    {
+      label: "Rangkaian Listrik", route: "missions/rangkaian-listrik/quiz"
+    },
+    {
+      label: "Sumber Listrik", route: "missions/sumber-listrik/quiz"
+    },
+    {
+      label: "Daya Listrik", route: "missions/daya-listrik/quiz"
+    },
+    // { label: "Pertumbuhan & Perkembangan", route: "/missions/pertumbuhan-perkembangan" },
+    // { label: "Pertumbuhan Manusia", route: "/missions/pertumbuhan-manusia" },
     // { label: "Sifat Cahaya", route: "/missions/sifat-cahaya" },
     // { label: "Hukum Pemantulan Sinar", route: "/missions/pemantulan" },
     // { label: "Jumlah Bayangan Pada Cermin Datar", route: "/missions/bayangan-datar" },
