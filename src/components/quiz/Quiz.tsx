@@ -107,7 +107,7 @@ export default function PlaneQuizGame({
   const nextQuestion = () => {
     setPopup(null);
     setDestroyed([]);
-    setBullets(2);
+    setBullets(10);
     setJustHit([]);
     setPlaneX("50%");
     setPlaneReady(true);
