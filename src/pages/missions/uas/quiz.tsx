@@ -3,12 +3,12 @@ import PlaneQuizGame from "@/components/quiz/Quiz";
 const questionData = [
   // 1
   {
-    question: "Sebuah balok ditekan pada lantai dengan gaya 200 N dan luas bidang tekan 0,5 m². Berapa tekanan yang diberikan balok?",
+    question: "Sebuah balok ditekan pada lantai dengan gaya 200 N dan luas bidang tekan 2 m². Berapa tekanan yang diberikan balok?",
     options: [
-      { option: "100 Pa", message: "Salah. 200 / 0.5 bukan 100." },
-      { option: "200 Pa", message: "Salah, itu hanya gaya dibagi 1 m²." },
+      { option: "400 Pa", message: "Salah." },
+      { option: "200 Pa", message: "Salah." },
       { option: "300 Pa", message: "Salah." },
-      { option: "400 Pa", message: "Benar! P = F/A = 200 / 0.5 = 400 Pa." },
+      { option: "100 Pa", message: "Benar! P = F/A = 200 / 2 = 100 Pa." },
     ],
     correctIndex: 3,
   },

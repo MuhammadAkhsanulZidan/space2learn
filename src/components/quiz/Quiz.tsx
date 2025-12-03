@@ -28,7 +28,7 @@ export default function PlaneQuizGame({
   const questionData = questions[questionIndex];
   const [totalBulletsUsed, setTotalBulletsUsed] = useState(0);
 
-  const [bullets, setBullets] = useState(2);
+  const [bullets, setBullets] = useState(10);
   const [meteors] = useState([0, 1, 2, 3]);
   const [destroyed, setDestroyed] = useState<number[]>([]);
   const [gameOver, setGameOver] = useState(false);
